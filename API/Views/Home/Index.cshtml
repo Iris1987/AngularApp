@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Thematic Dictionary - Home";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="indicator" style="z-index:1">
+            <ul class="tabs">
+                <li class="tab col s3"><a target="_self" class="active" href="@Url.Action("Index", "EngEst")">English → Estonian</a></li>
+                <li class="tab col s3"><a target="_self" href="@Url.Action("Index", "EngRus")">English → Russian</a></li>
+                <li class="tab col s3"><a target="_self" href="@Url.Action("Index", "RusEst")">Russian → Estonian</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>

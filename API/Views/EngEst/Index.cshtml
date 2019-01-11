@@ -1,0 +1,125 @@
+﻿@model IEnumerable<EngEstViewModel>
+@using API.Models
+@{
+    ViewData["Title"] = "Thematic Dictionary - Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="indicator" style="z-index:1">
+            <ul class="tabs">
+                <li class="tab col s3"><a target="_self" class="active" href="@Url.Action("Index", "EngEst")">English → Estonian</a></li>
+                <li class="tab col s3"><a target="_self" href="@Url.Action("Index", "EngRus")">English → Russian</a></li>
+                <li class="tab col s3"><a target="_self" href="@Url.Action("Index", "RusEst")">Russian → Estonian</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    @using (Html.BeginForm("Index", "EngEst", FormMethod.Get))
+    {
+        <div class="input-field col l3 m12 s12">
+            <select id="category" name="category" onchange="submit()">
+                <option value="" disabled selected>Choose category</option>
+                @foreach (var item in ViewBag.Cats)
+                {
+                    <option value="@item.IdCategory">@item.Categoryname</option>
+                }
+            </select>
+            <label>Category</label>
+        </div>
+
+    }
+    @using (Html.BeginForm("Index", "EngEst", FormMethod.Get))
+    {
+        <div class="input-field col col l3 m12 s12">
+            <select id="subcategory" name="subcategory" onchange="submit()">
+                <option value="" disabled selected>Choose subcategory</option>
+                @foreach (var item in ViewBag.Cats)
+                {
+                    <optgroup label="@item.Categoryname"> </optgroup>
+                    @foreach (var item2 in item.Subcategory)
+                    {
+                        <option value="@item2.IdSubcategory">@item2.Subcategoryname</option>
+                    }
+
+                }
+            </select>
+            <label>Subcategory</label>
+        </div>
+    }
+
+    @using (Html.BeginForm("Index", "EngEst", FormMethod.Get, new { @class = "col s10 l5 m10" }))
+    {
+        <div class="row" style="padding: 0px!important;">
+            <div class="input-field">
+                <i class="material-icons prefix" style="margin-top:10px;">search</i>
+                <input type="search" placeholder="Type word for searching" id="search" name="search"> <!-- class="live-search-box"-->
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Index", "EngEst", FormMethod.Get))
+    {
+        <div class="col s1 m2 l1">
+            <button class="btn waves-effect waves-light grey z-depth-0" style="padding-left: 10px; padding-right: 8px; margin-top: 25px;" type="submit">
+                <i class="material-icons prefix">clear</i>
+            </button>
+        </div>
+    }
+</div>
+
+<div class="row ">
+    <div class="col s12 translates">
+        @foreach (var item in Model)
+        {
+            <word>
+                <div class="row">
+                    <div class="col s12 m12 l9 mainword">
+                        <h5 class="engword">@Html.DisplayFor(modelItem => item.IdWordEngNavigation.Word)</h5>
+                    </div>
+                    <div class="col s12 m12 l3">
+                        <span class="new badge indigo lighten-1"
+                              data-badge-caption=" @Html.DisplayFor(modelItem => item.IdCategoryNavigation.IdCategoryNavigation.Categoryname)"></span>
+                        <span class="new badge blue"
+                              data-badge-caption=" @Html.DisplayFor(modelItem => item.IdCategoryNavigation.Subcategoryname)"></span>
+                        <span class="new badge light-green"
+                              data-badge-caption=" @Html.DisplayFor(modelItem => item.IdPartNavigation.Partname)"></span>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row highlighted">
+                    <div class="col s12 m12 l3 definition">
+                        @Html.DisplayFor(modelItem => item.IdWordEstNavigation.Word)
+                    </div>
+                    <div class="col s12 m12 l8 explanation  offset-l1 ">
+                        @Html.DisplayFor(modelItem => item.Example)
+                    </div>
+                </div>
+            </word>
+        }
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function ($) {
+
+        $('.engword').each(function () {
+            $(this).attr('data-search-term', $(this).text().toLowerCase());
+        });
+
+        $('.live-search-box').on('keyup', function () {
+            var searchTerm = $(this).val().toLowerCase();
+            $('word').each(function () {
+                if ($('.engword').filter('[data-seatch-term]*= ' + searchTerm + ']').length > 0 || searchTerm.length < 1) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+
+            });
+
+        });
+
+    });</script>

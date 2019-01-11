@@ -1,0 +1,125 @@
+/* You can add global styles to this file, and also import other style files */
+.brand-logo {
+    margin-left: 20px;
+}
+
+.material-icons {
+    margin-right: 5px !important
+}
+
+.side-nav {
+    background: #01579b !important;
+}
+
+    .side-nav li > a, .side-nav li .material-icons {
+        color: #fff !important;
+    }
+
+nav {
+    box-shadow: none !important;
+    margin-bottom: 15px;
+}
+
+
+.tabs .tab a.active {
+    color: #0288d1 !important;
+    font-weight: bold !important;
+}
+
+.tabs .tab a {
+    color: #0288d1 !important;
+}
+
+.tabs .tab a:hover {
+color: #01579b !important;
+}
+
+.tabs .indicator {
+    background-color: #0288d1 !important;
+}
+
+footer {
+    margin-top: 15px;
+}
+
+.definition {
+    font-weight: bold;
+}
+
+.highlighted {
+    -webkit-transition: background-color .25s ease;
+    transition: background-color .25s ease;
+}
+
+.row .highlighted:hover {
+    background-color: #f2f2f2;
+}
+
+.row {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    margin: auto !important;
+}
+
+.badge {
+    margin-left: 3px !important;
+    margin-top: 3px !important;
+}
+
+.dropdown-content li > a, .dropdown-content li > span, .input-field .prefix.active {
+    color: #01579b !important;
+}
+
+.dropdown-content li.optgroup > span {
+    color: #999 !important;
+}
+
+.explanation {
+    text-align: justify;
+}
+
+[type="radio"]:checked + label::after, [type="radio"].with-gap:checked + label::after {
+    background-color: #0288d1 !important;
+}
+
+[type="radio"]:checked + label::after, [type="radio"].with-gap:checked + label::before, [type="radio"].with-gap:checked + label::after {
+    border: 2px solid #0288d1 !important;
+}
+
+.btn.small {
+    font-size: 12px;
+    padding: 10px;
+    line-height: 10px;
+    height: 30px;
+    background-color: #0277bd;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+.remove {
+    background-color: #bf360c !important;
+}
+
+i.button {
+    margin-right: 0px !important;
+}
+
+.uppercase {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+@media only screen and (max-width: 992px) {
+
+    .explanation {
+        margin-top: 18px !important;
+    }
+}
+
+
+@media only screen and (max-width: 650px) {
+    nav .brand-logo {
+        font-size: 1.3rem !important;
+    }
+}

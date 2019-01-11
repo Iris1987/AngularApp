@@ -1,0 +1,92 @@
+﻿@model IEnumerable<EngEstViewModel>
+@using API.Models
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<table class="table table-bordered table-striped table-condensed">
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.IdWordEngNavigation.Word)</td>
+                <td>@Html.DisplayFor(modelItem => item.IdWordEstNavigation.Word)</td>
+                <td>@Html.DisplayFor(modelItem => item.IdCategoryNavigation.Subcategoryname)</td>
+                <td>
+                    <a id="editUserModal" data-toggle="modal" asp-action="Update" asp-route-id="@item.IdTranslation" data-target="#modal-action-user"
+                       class="btn btn-info">
+                        <i class="glyphicon glyphicon-pencil"></i>  Edit
+                    </a>
+                    <a id="deleteUserModal" data-toggle="modal" asp-action="Delete" asp-route-id="@item.IdTranslation" data-target="#modal-action-user" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>  Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!--https://professorweb.ru/my/ASP_NET/mvc/level6/6_2.php-->
+@using (Html.BeginForm("Create", "EngEst", FormMethod.Post))
+{
+<div class="modal-body form-horizontal">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <div class="col-m-6">
+                    <select name="IdWordEng" required>
+                        <option value="">Choose English word</option>
+                        @foreach (var item in ViewBag.WordEng)
+                        {
+                            <option value="@item.IdWord">@item.Word</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-m-6">
+                    <select name="IdWordEst" required>
+                        <option value="">Choose Estonian word</option>
+                        @foreach (var item in ViewBag.WordEst)
+                        {
+                            <option value="@item.IdWord">@item.Word</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="form-group">
+                <div class="col-m-6">
+                    <select name="IdCategory" required>
+                        <option value="">Choose subcategory</option>
+                        @foreach (var item in ViewBag.Subs)
+                {
+                    <option value="@item.IdSubcategory">@item.Subcategoryname</option>
+}
+                    </select>
+                </div>
+                <div class="col-m-6">
+                    <select name="IdPart" required>
+                        <option value="">Choose part of speech</option>
+                        @foreach (var item in ViewBag.Parts)
+                {
+                    <option value="@item.IdPart">@item.Partname</option>
+}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" name="Example" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</div>
+}
+
+
+

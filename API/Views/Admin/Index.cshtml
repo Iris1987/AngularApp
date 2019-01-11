@@ -1,0 +1,54 @@
+﻿@model IEnumerable<EngEstViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col s12">
+        <div class="indicator" style="z-index:1">
+            <ul class="tabs">
+                <li class="tab col s3"><a class="active" href="#translation">Add translation</a></li>
+                <li class="tab col s3"><a href="#manage">Manage translations</a></li>
+                <li class="tab col s3"><a target="_self"  href="@Url.Action("Categories", "Admin")">Categories</a></li>
+
+            </ul>
+        </div>
+    </div>
+    <div id="translation" class="col s12">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a class="active" href="#engest">English → Estonian</a></li>
+                    <li class="tab col s3"><a href="#engrus">English → Russian</a></li>
+                    <li class="tab col s3"><a href="#rusest">Russian → Estonian</a></li>
+                </ul>
+            </div>
+
+            <div id="engest" class="col s12">@Html.Partial("EngEstAdd", new EngEstViewModel())</div>
+            <div id="engrus" class="col s12">@Html.Partial("EngRusAdd", new EngRusViewModel())</div>
+            <div id="rusest" class="col s12">@Html.Partial("RusEstAdd", new RusEstViewModel())</div>
+        </div>
+
+
+        <!-- <div id="category" class="col s12">
+     </div>-->
+
+
+    </div>
+    <div id="manage" class="col s12">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a class="active" href="#manageengest">English → Estonian</a></li>
+                    <li class="tab col s3"><a target="_self" href="@Url.Action("ManageEngRus", "Admin")">English → Russian</a></li>
+                    <li class="tab col s3"><a target="_self" href="@Url.Action("ManageRusEst", "Admin")">Russian → Estonian</a></li>
+                </ul>
+            </div>
+
+            <div id="manageengest" class="col s12">
+                @Html.Partial("EngEstUpdate", Model)
+            </div>
+        </div>
+    </div>
+</div>

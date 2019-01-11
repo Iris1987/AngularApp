@@ -1,0 +1,84 @@
+﻿@model API.Models.EngRusViewModel
+<div class="row">
+    <!--https://professorweb.ru/my/ASP_NET/mvc/level6/6_2.php-->
+    @using (Html.BeginForm("CreateEngRus", "Admin", FormMethod.Post, new { @class = "col s12" }))
+    {
+        <div class="row">
+            <div class="input-field col s12 m5">
+                <select name="IdWordEng">
+                    <option value="" disabled selected>Choose english word</option>
+                    @foreach (var item in ViewBag.WordEng)
+                    {
+                        <option value="@item.IdWord">@item.Word</option>
+                    }
+                </select>
+                <label>English word</label>
+            </div>
+            <div class="input-field col s1 m1 center-align" style="margin-top: 26px;">
+                or
+            </div>
+            <div class="input-field col s11 m6">
+                <input id="newWord" type="text" class="validate" placeholder="Type new word">
+                <label for="newWord">Add new word</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12 m5">
+                <select name="IdWordRus">
+                    <option value="" disabled selected>Choose russian word</option>
+                    @foreach (var item in ViewBag.WordRus)
+                    {
+                        <option value="@item.IdWord">@item.Word</option>
+                    }
+                </select>
+                <label>Russian word</label>
+            </div>
+            <div class="input-field col s1 m1 center-align" style="margin-top: 26px;">
+                or
+            </div>
+            <div class="input-field col s11 m6">
+                <input id="newWord2" type="text" class="validate" placeholder="Type new word">
+                <label for="newWord2">Add new word</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12 m6">
+                <select id="IdCategory" name="IdCategory">
+                    <option value="" disabled selected>Choose subcategory</option>
+                    @foreach (var item in ViewBag.Subs)
+                    {
+                        <option value="@item.IdSubcategory">@item.Subcategoryname</option>
+
+                    }
+                </select>
+                <label>Select subcategory</label>
+
+            </div>
+            <div class="input-field col s12 m6">
+                <select name="IdPart">
+                    <option value="" disabled selected>Choose part of speech </option>
+                    @foreach (var item in ViewBag.Parts)
+                    {
+                        <option value="@item.IdPart">@item.Partname</option>
+                    }
+                </select>
+                <label>Select part of speech</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <textarea id="example" name="example" class="materialize-textarea" placeholder="Input word usage example or description"></textarea>
+                <label for="example">Description</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12 m6 center-align">
+                <button class="btn waves-effect  grey darken-1" onclick="this.form.reset()">Clear</button>
+            </div>
+            <div class="input-field col s12 m6 center-align">
+                <button class="btn waves-effect  light-blue darken-3" type="submit" >Add word</button>
+            </div>
+        </div>
+
+    }
+</div>

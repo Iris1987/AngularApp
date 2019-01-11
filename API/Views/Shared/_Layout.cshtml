@@ -1,0 +1,103 @@
+﻿@inject CustomLocalizer localizer
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8" />
+            <title>Thematical Dictionary</title>
+            <!--Import Google Icon Font-->
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link href="~/materialize/css/materialize.css" rel="stylesheet" />
+            <link href="~/css/styles.css" rel="stylesheet" />
+            <!--Import jQuery before materialize.js-->
+            <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+            <script src="~/materialize/js/materialize.js"></script>
+
+            <!--Let browser know website is optimized for mobile-->
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        </head>
+
+
+
+
+
+
+        <body class="grey lighten-3">
+
+            <nav>
+                <div class="light-blue darken-3 nav-wrapper">
+                    <a href="/EngEst" class="brand-logo">
+                        <i class="tiny material-icons left">library_books</i>Thematic Dictionary
+                    </a>
+                    <a href="#" data-activates="mobile-demo" class="button-collapse">
+                        <i class="material-icons">menu</i>
+                    </a>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                            <a href="/EngEst">
+                                <i class="tiny material-icons left">home</i>Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Login">
+                                <i class="tiny material-icons left">person</i>Sign in
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="side-nav" id="mobile-demo">
+                        <li>
+                            <a href="/EngEst">
+                                <i class="tiny material-icons left">home</i>Home
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Login">
+                                <i class="tiny material-icons left">person</i>Sign in
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="container white" style="padding:20px;">
+                @RenderBody()
+
+
+                @{
+                    string currentController = ViewContext.RouteData.Values["Controller"].ToString();
+                    string currentAction = ViewContext.RouteData.Values["Action"].ToString();
+                }
+
+                <footer class="navbar-inverse navbar-fixed-bottom">
+                    <div class="container-fluid">
+                        <ul class="nav navbar-nav">
+                            <li is-active-language asp-route-lang="en"><a asp-controller=@currentController asp-action=@currentAction asp-route-lang="en">English</a></li>
+                            <li is-active-language asp-route-lang="et"><a asp-controller=@currentController asp-action=@currentAction asp-route-lang="et">Eesti</a></li>
+                            <li is-active-language asp-route-lang="ru"><a asp-controller=@currentController asp-action=@currentAction asp-route-lang="ru">Русский</a></li>
+                        </ul>
+                    </div>
+                </footer>
+
+
+            </div>
+            <script>
+                $(document).ready(function () {
+                    $(".button-collapse").sideNav();
+                    $('select').material_select();
+
+                })
+            </script>
+
+            <!-- container end -->
+            <footer class="page-footer light-blue darken-3">
+                <div class="footer-copyright">
+                    <div class="container">
+                        @localizer["test"]
+                        @localizer["ForTest"]
+                        © 2018 Ilja Elonen | Ksenia Koroljova
+                        <a class="grey-text text-lighten-4 right" href="https://www.ttu.ee/asutused/virumaa-kolledz/">TTÜ Virumaa Kolledž</a>
+                    </div>
+                </div>
+            </footer>
+
+        </body>
+    </html>
