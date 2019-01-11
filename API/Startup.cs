@@ -46,8 +46,8 @@ namespace API
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-           
 
+            services.AddMvc();
             services.AddAutoMapper();
             services.AddDbContext<MyContext>
             (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
