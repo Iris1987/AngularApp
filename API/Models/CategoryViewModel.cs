@@ -8,12 +8,16 @@ namespace API.Models
 {
     public class CategoryViewModel
     {
-       
+
+        public CategoryViewModel()
+        {
+            Subcategory = new HashSet<SubcategoryViewModel>();
+        }
 
         public int IdCategory { get; set; }
         public string Categoryname { get; set; }
 
-        public SubcategoryViewModel Subcategory { get; set; }
+        public ICollection<SubcategoryViewModel> Subcategory { get; set; }
 
         //public static implicit operator CategoryViewModel(Category cat)
         //{

@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
-
+using API.Models;
 
 namespace API
 {
@@ -46,9 +46,16 @@ namespace API
                     .AllowAnyHeader()
                     .AllowCredentials());
             });
-           
-
+            //services.AddMvc();
+            //var mappingConfig = new MapperConfiguration(x =>
+            //{
+            //    x.AddProfile(new MappingProfile());
+            //});
+            //IMapper mapper = mappingConfig.CreateMapper();
+            //services.AddSingleton(mapper);
+            services.AddCors();
             services.AddAutoMapper();
+            services.AddMvc();
             services.AddDbContext<MyContext>
             (options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -70,16 +77,11 @@ namespace API
             services.AddTransient<IGenericService<LangEstonian>, EstService>();
             services.AddTransient<IGenericService<LangRussian>, RusService>();
 
-
             services.AddTransient<IGenericTranslate<TranslationEngEst>, EngEstService>();
-
-
             services.AddTransient<IGenericTranslate<TranslationEngRus>, EngRusService>();
-
-
             services.AddTransient<IGenericTranslate<TranslationRusEst>, RusEstService>();
-            
-           
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,16 +103,18 @@ namespace API
             app.UseStaticFiles();
 
             app.UseAuthentication();
-            app.UseCors("CorsPolicy");
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "LocalizedDefault",
-                    template: "{controller=EngEst}/{action=Index}/{id?}");
+            //app.UseCors("CorsPolicy");
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200"));
+            app.UseMvc();
+            //app.UseMvc(routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "LocalizedDefault",
+            //        template: "{controller=EngEst}/{action=Index}/{id?}");
 
 
-                //routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Home", action = "Index" });//not sure, for 404 errors
-            });
+            //    //routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Home", action = "Index" });//not sure, for 404 errors
+            //});
         }
     }
 }

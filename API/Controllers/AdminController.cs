@@ -53,303 +53,538 @@ namespace API.Controllers
             this.translationRusEst = translationRusEst;
 
         }
+        [HttpGet]
+        [Route("{search}")]
+        public ActionResult Search(string search)
+        {
+            return Json(translation.Find(search));
+        }
 
         [HttpGet]
-        public /*ActionResult*/ JsonResult Index(string search)
+        [Route("Cat/{category}/{search}")]
+        public ActionResult GetByCat(string search, int category)
         {
-            List<EngEstViewModel> model = new List<EngEstViewModel>();
-            IEnumerable<TranslationEngEst> found;
-
-            var wordEng = langEnglish.GetAll().ToList();
-            var wordEst = langEstonian.GetAll().ToList();
-            var parts = part.GetAll().ToList();
-            var cats = cat.GetAll();
-            var subs = sub.GetAll();
-            var wordRus = langRussian.GetAll().ToList();
-
-            //ViewBag.WordEng = wordEng;
-            //ViewBag.WordEst = wordEst;
-            //ViewBag.Parts = parts;
-            //ViewBag.Cats = cats;
-            //ViewBag.Subs = subs;
-            //ViewBag.WordRus = wordRus;
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                found = translation.Find(search);
-            }
-            else
-            {
-                found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
-            }
-            found.ToList().ForEach(x =>
-            {
-                var stuff = mapper.Map<TranslationEngEst, EngEstViewModel>(translation.GetByID(x.IdTranslation));
-                model.Add(stuff);
-            });
-
-            //return View(model);
-            return Json(model);
+            return Json(translation.FindByCategory(category, search));
         }
-
-        // ------------------------------------------------------- ENG EST TRANSLATE
-        // ------------------------------------------------------- ENG EST TRANSLATE
-        // ------------------------------------------------------- ENG EST TRANSLATE
-
-        public ActionResult CreateEngEst(EngEstViewModel model)
+        [HttpGet]
+        [Route("Subcat/{subcategory}/{search}")]
+        public ActionResult GetBySubcat(string search, int subcategory)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    translation.Create(mapper.Map<EngEstViewModel, TranslationEngEst>(model));
-
-                    //TranslationEngEst trans = new TranslationEngEst();
-                    //translation.Create(trans);
-                    //return RedirectToAction(nameof(Index));
-                }
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Unable to save changes. ");
-
-            }
-            return RedirectToAction("Index");
+            return Json(translation.FindBySubcategory(subcategory, search));
         }
-
-
-        
+        [HttpGet]
+        [Route("Cat/{category}/Subcat/{subcategory}/{search}")]
+        public ActionResult GetByCatSubcat(string search, int category, int subcategory)
+        {
+            return Json(translation.FindByCatSubcat(category, subcategory, search));
+        }
+        /// ENGEST
+        /// 
+        /// 
         [HttpPost]
-        public ActionResult UpdateEngEst(EngEstViewModel ee)
+        [Route("")]
+        public ActionResult UpdateENGEST(EngEstViewModel ee)
         {
+
             translation.Update(mapper.Map<EngEstViewModel, TranslationEngEst>(ee));
-            return RedirectToAction("Index");
+           
+            return Ok();
         }
-
-        public ActionResult DeleteEngEst(int id)
-        {
-            translation.Delete(id);
-            return RedirectToAction("Index");
-
-        }
-
-        // ------------------------------------------------------- ENG RUS TRANSLATE
-        // ------------------------------------------------------- ENG RUS TRANSLATE
-        // ------------------------------------------------------- ENG RUS TRANSLATE
-        public JsonResult ManageEngRus(string search)
-        {
-            List<EngRusViewModel> model = new List<EngRusViewModel>();
-            IEnumerable<TranslationEngRus> found;
-            var wordEng = langEnglish.GetAll().ToList();
-            var wordRus = langRussian.GetAll().ToList();
-            var parts = part.GetAll().ToList();
-            var cats = cat.GetAll();
-            var subs = sub.GetAll();
-
-            ViewBag.WordEng = wordEng;
-            ViewBag.WordRus = wordRus;
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                found = translationEngRus.Find(search);
-            }
-            else
-            {
-                found = translationEngRus.GetAll().ToList().OrderBy(x => x.IdWordEng);
-            }
-              found.ToList().ForEach(x =>
-              {
-                  var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translationEngRus.GetByID(x.IdTranslation));
-                  model.Add(stuff);
-              });
-
-            //return View(model);
-            return Json(model);
-        }
-
-
-        public ActionResult CreateEngRus(EngRusViewModel model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    translationEngRus.Create(mapper.Map<EngRusViewModel, TranslationEngRus>(model));
-                }
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Unable to save changes. ");
-
-            }
-            return RedirectToAction("ManageEngRus");
-        }
-                
-      /*  [HttpPost]
-        public ActionResult UpdateEngRus(EngRusViewModel model)
-        {
-            translationEngRus.Update(mapper.Map<EngRusViewModel, TranslationEngRus>(model));
-
-            return RedirectToAction("Index");
-        }*/
-
-        public ActionResult DeleteEngRus(int id)
-        {
-            translationEngRus.Delete(id);
-            return RedirectToAction("ManageEngRus");
-
-        }
-
-        // ------------------------------------------------------- RUS EST TRANSLATE
-        // ------------------------------------------------------- RUS EST TRANSLATE
-        // ------------------------------------------------------- RUS EST TRANSLATE
-
-        public ActionResult ManageRusEst(string search)
-        {
-            List<RusEstViewModel> model = new List<RusEstViewModel>();
-            IEnumerable<TranslationRusEst> found;
-            var wordEst = langEstonian.GetAll().ToList();
-            var wordRus = langRussian.GetAll().ToList();
-            var parts = part.GetAll().ToList();
-            var cats = cat.GetAll();
-            var subs = sub.GetAll();
-
-            ViewBag.WordEst = wordEst;
-            ViewBag.WordRus = wordRus;
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                found = translationRusEst.Find(search);
-            }
-            else
-            {
-                found = translationRusEst.GetAll().ToList().OrderBy(x => x.IdWordRus);
-            }
-            found.ToList().ForEach(x =>
-            {
-                var stuff = mapper.Map<TranslationRusEst, RusEstViewModel>(translationRusEst.GetByID(x.IdTranslation));
-                model.Add(stuff);
-            });
-
-            return View(model);
-        }
-
-
-        public ActionResult CreateRusEst(RusEstViewModel model)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    translationRusEst.Create(mapper.Map<RusEstViewModel, TranslationRusEst>(model));
-                }
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Unable to save changes. ");
-
-            }
-            return RedirectToAction("ManageRusEst");
-        }
-
-        public ActionResult DeleteRusEst(int id)
-        {
-            translationRusEst.Delete(id);
-            return RedirectToAction("ManageRusEst");
-
-        }
-
-        // ------------------------------------------------------- CATEGORIES
-        // ------------------------------------------------------- CATEGORIES
-        // ------------------------------------------------------- CATEGORIES
-        public /*ActionResult*/ JsonResult Categories(string search)
-        {
-            List<CategoryViewModel> model = new List<CategoryViewModel>();
-            IEnumerable<Category> found;
-            var cats = cat.GetAll();
-            var subs = sub.GetAll();
-
-            ViewBag.Cats = cats;
-            ViewBag.Subs = subs;
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                found = cat.Find(search);
-            }
-            else
-            {
-                found = cat.GetAll().ToList().OrderBy(x => x.Categoryname);
-            }
-            /*  found.ToList().ForEach(x =>
-              {
-                  //   var stuff = mapper.Map<Category, CategoryViewModel>(cat.GetByID(x.IdCategory));
-                  var stuff = new CategoryViewModel()
-                  {
-                      stuff.IdCategory = x.IdCategory,
-                      stuff.Subcategory = x.Subcategory,
-                      stuff.Categoryname = x.Categoryname
-                  };
-                  model.Add(stuff);
-              });*/
-
-            foreach (var item in found)
-            {
-                var stuff = new CategoryViewModel()
-                {
-                    Categoryname = item.Categoryname,
-                    IdCategory = item.IdCategory
-                };
-                model.Add(stuff);
-            }
-
-            return Json(model);
-        }
-        
 
         [HttpPost]
-        public ActionResult CreateCategory(CategoryViewModel model)
+        [Route("")]
+        public ActionResult DeleteENGEST(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var stuff = new Category()
-                {
-                    Categoryname = model.Categoryname
-                };
-                cat.Create(stuff);
-            }
 
-            return RedirectToAction("Categories");
-    }
+            translation.Delete(id);
 
-    public ActionResult DeleteCategory(int id)
-    {
-        cat.Delete(id);
-        return RedirectToAction("Categories");
-
-    }
-
-        //---------------------------------------------------------- SUBCATEGORIES
-        public ActionResult CreateSubcategory(SubcategoryViewModel model)
+            return Ok();
+        }
+        [HttpPost]
+        [Route("")]
+        public ActionResult CreateENGEST(EngEstViewModel ee)
         {
-            if (ModelState.IsValid)
+
+            try
             {
-                var stuff = new Subcategory()
+                if (ModelState.IsValid)
                 {
-                    Subcategoryname = model.Subcategoryname,
-                    IdCategory = model.IdCategory
-
-                };
-                sub.Create(stuff);
+                    translation.Create(mapper.Map<EngEstViewModel, TranslationEngEst>(ee));
+                }
             }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to save changes. ");
 
-            return RedirectToAction("Categories");
+            }
+            return Ok();
         }
 
-        public ActionResult DeleteSubcategory(int id)
+        /// ENGRUS
+        /// 
+        /// 
+        [HttpPost]
+        [Route("")]
+        public ActionResult UpdateENGRUS(EngRusViewModel ee)
         {
+
+            translationEngRus.Update(mapper.Map<EngRusViewModel,TranslationEngRus>(ee));
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult DeleteENGRUS(int id)
+        {
+
+            translationEngRus.Delete(id);
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("")]
+        public ActionResult CreateENGRUS(EngRusViewModel ee)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    translationEngRus.Create(mapper.Map<EngRusViewModel, TranslationEngRus>(ee));
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to save changes. ");
+
+            }
+            return Ok();
+        }
+
+        /// RUSEST
+        /// 
+        /// 
+        [HttpPost]
+        [Route("")]
+        public ActionResult UpdateRUSEST(RusEstViewModel ee)
+        {
+
+            translationRusEst.Update(mapper.Map<RusEstViewModel, TranslationRusEst>(ee));
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult DeleteRUSEST(int id)
+        {
+
+            translationRusEst.Delete(id);
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("")]
+        public ActionResult CreateRUSEST(RusEstViewModel ee)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    translationRusEst.Create(mapper.Map<RusEstViewModel, TranslationRusEst>(ee));
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to save changes. ");
+
+            }
+            return Ok();
+        }
+
+        /// CATEGORY
+        /// 
+        /// 
+        [HttpPost]
+        [Route("")]
+        public ActionResult UpdateCATEGORY(CategoryViewModel ee)
+        {
+
+            cat.Update(mapper.Map<CategoryViewModel, Category>(ee));
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult DeleteCATEGORY(int id)
+        {
+
+            cat.Delete(id);
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("")]
+        public ActionResult CreateCATEGORY(CategoryViewModel ee)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    cat.Create(mapper.Map<CategoryViewModel, Category>(ee));
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to save changes. ");
+
+            }
+            return Ok();
+        }
+
+        /// SUBCATEGORY
+        /// 
+        /// 
+        [HttpPost]
+        [Route("")]
+        public ActionResult UpdateSUBCATEGORY(SubcategoryViewModel ee)
+        {
+
+            sub.Update(mapper.Map<SubcategoryViewModel, Subcategory>(ee));
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("")]
+        public ActionResult DeleteSUBCATEGORY(int id)
+        {
+
             sub.Delete(id);
-            return RedirectToAction("Categories");
 
+            return Ok();
         }
+        [HttpPost]
+        [Route("")]
+        public ActionResult CreateSUBCATEGORY(SubcategoryViewModel ee)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    sub.Create(mapper.Map<SubcategoryViewModel, Subcategory>(ee));
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Unable to save changes. ");
+
+            }
+            return Ok();
+        }
+        #region
+        //    [HttpGet]
+        //    public /*ActionResult*/ JsonResult Index(string search)
+        //    {
+        //        List<EngEstViewModel> model = new List<EngEstViewModel>();
+        //        IEnumerable<TranslationEngEst> found;
+
+        //        var wordEng = langEnglish.GetAll().ToList();
+        //        var wordEst = langEstonian.GetAll().ToList();
+        //        var parts = part.GetAll().ToList();
+        //        var cats = cat.GetAll();
+        //        var subs = sub.GetAll();
+        //        var wordRus = langRussian.GetAll().ToList();
+
+        //        //ViewBag.WordEng = wordEng;
+        //        //ViewBag.WordEst = wordEst;
+        //        //ViewBag.Parts = parts;
+        //        //ViewBag.Cats = cats;
+        //        //ViewBag.Subs = subs;
+        //        //ViewBag.WordRus = wordRus;
+
+        //        if (!String.IsNullOrEmpty(search))
+        //        {
+        //            found = translation.Find(search);
+        //        }
+        //        else
+        //        {
+        //            found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
+        //        }
+        //        found.ToList().ForEach(x =>
+        //        {
+        //            var stuff = mapper.Map<TranslationEngEst, EngEstViewModel>(translation.GetByID(x.IdTranslation));
+        //            model.Add(stuff);
+        //        });
+
+        //        //return View(model);
+        //        return Json(model);
+        //    }
+
+        //    // ------------------------------------------------------- ENG EST TRANSLATE
+        //    // ------------------------------------------------------- ENG EST TRANSLATE
+        //    // ------------------------------------------------------- ENG EST TRANSLATE
+
+        //    public ActionResult CreateEngEst(EngEstViewModel model)
+        //    {
+        //        try
+        //        {
+        //            if (ModelState.IsValid)
+        //            {
+        //                translation.Create(mapper.Map<EngEstViewModel, TranslationEngEst>(model));
+
+        //                //TranslationEngEst trans = new TranslationEngEst();
+        //                //translation.Create(trans);
+        //                //return RedirectToAction(nameof(Index));
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            ModelState.AddModelError("", "Unable to save changes. ");
+
+        //        }
+        //        return RedirectToAction("Index");
+        //    }
+
+
+
+        //    [HttpPost]
+        //    public ActionResult UpdateEngEst(EngEstViewModel ee)
+        //    {
+        //        translation.Update(mapper.Map<EngEstViewModel, TranslationEngEst>(ee));
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    public ActionResult DeleteEngEst(int id)
+        //    {
+        //        translation.Delete(id);
+        //        return RedirectToAction("Index");
+
+        //    }
+
+        //    // ------------------------------------------------------- ENG RUS TRANSLATE
+        //    // ------------------------------------------------------- ENG RUS TRANSLATE
+        //    // ------------------------------------------------------- ENG RUS TRANSLATE
+        //    public JsonResult ManageEngRus(string search)
+        //    {
+        //        List<EngRusViewModel> model = new List<EngRusViewModel>();
+        //        IEnumerable<TranslationEngRus> found;
+        //        var wordEng = langEnglish.GetAll().ToList();
+        //        var wordRus = langRussian.GetAll().ToList();
+        //        var parts = part.GetAll().ToList();
+        //        var cats = cat.GetAll();
+        //        var subs = sub.GetAll();
+
+        //        ViewBag.WordEng = wordEng;
+        //        ViewBag.WordRus = wordRus;
+
+        //        if (!String.IsNullOrEmpty(search))
+        //        {
+        //            found = translationEngRus.Find(search);
+        //        }
+        //        else
+        //        {
+        //            found = translationEngRus.GetAll().ToList().OrderBy(x => x.IdWordEng);
+        //        }
+        //          found.ToList().ForEach(x =>
+        //          {
+        //              var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translationEngRus.GetByID(x.IdTranslation));
+        //              model.Add(stuff);
+        //          });
+
+        //        //return View(model);
+        //        return Json(model);
+        //    }
+
+
+        //    public ActionResult CreateEngRus(EngRusViewModel model)
+        //    {
+        //        try
+        //        {
+        //            if (ModelState.IsValid)
+        //            {
+        //                translationEngRus.Create(mapper.Map<EngRusViewModel, TranslationEngRus>(model));
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            ModelState.AddModelError("", "Unable to save changes. ");
+
+        //        }
+        //        return RedirectToAction("ManageEngRus");
+        //    }
+
+        //  /*  [HttpPost]
+        //    public ActionResult UpdateEngRus(EngRusViewModel model)
+        //    {
+        //        translationEngRus.Update(mapper.Map<EngRusViewModel, TranslationEngRus>(model));
+
+        //        return RedirectToAction("Index");
+        //    }*/
+
+        //    public ActionResult DeleteEngRus(int id)
+        //    {
+        //        translationEngRus.Delete(id);
+        //        return RedirectToAction("ManageEngRus");
+
+        //    }
+
+        //    // ------------------------------------------------------- RUS EST TRANSLATE
+        //    // ------------------------------------------------------- RUS EST TRANSLATE
+        //    // ------------------------------------------------------- RUS EST TRANSLATE
+
+        //    public ActionResult ManageRusEst(string search)
+        //    {
+        //        List<RusEstViewModel> model = new List<RusEstViewModel>();
+        //        IEnumerable<TranslationRusEst> found;
+        //        var wordEst = langEstonian.GetAll().ToList();
+        //        var wordRus = langRussian.GetAll().ToList();
+        //        var parts = part.GetAll().ToList();
+        //        var cats = cat.GetAll();
+        //        var subs = sub.GetAll();
+
+        //        ViewBag.WordEst = wordEst;
+        //        ViewBag.WordRus = wordRus;
+
+        //        if (!String.IsNullOrEmpty(search))
+        //        {
+        //            found = translationRusEst.Find(search);
+        //        }
+        //        else
+        //        {
+        //            found = translationRusEst.GetAll().ToList().OrderBy(x => x.IdWordRus);
+        //        }
+        //        found.ToList().ForEach(x =>
+        //        {
+        //            var stuff = mapper.Map<TranslationRusEst, RusEstViewModel>(translationRusEst.GetByID(x.IdTranslation));
+        //            model.Add(stuff);
+        //        });
+
+        //        return View(model);
+        //    }
+
+
+        //    public ActionResult CreateRusEst(RusEstViewModel model)
+        //    {
+        //        try
+        //        {
+        //            if (ModelState.IsValid)
+        //            {
+        //                translationRusEst.Create(mapper.Map<RusEstViewModel, TranslationRusEst>(model));
+        //            }
+        //        }
+        //        catch
+        //        {
+        //            ModelState.AddModelError("", "Unable to save changes. ");
+
+        //        }
+        //        return RedirectToAction("ManageRusEst");
+        //    }
+
+        //    public ActionResult DeleteRusEst(int id)
+        //    {
+        //        translationRusEst.Delete(id);
+        //        return RedirectToAction("ManageRusEst");
+
+        //    }
+
+        //    // ------------------------------------------------------- CATEGORIES
+        //    // ------------------------------------------------------- CATEGORIES
+        //    // ------------------------------------------------------- CATEGORIES
+        //    public /*ActionResult*/ JsonResult Categories(string search)
+        //    {
+        //        List<CategoryViewModel> model = new List<CategoryViewModel>();
+        //        IEnumerable<Category> found;
+        //        var cats = cat.GetAll();
+        //        var subs = sub.GetAll();
+
+        //        ViewBag.Cats = cats;
+        //        ViewBag.Subs = subs;
+
+        //        if (!String.IsNullOrEmpty(search))
+        //        {
+        //            found = cat.Find(search);
+        //        }
+        //        else
+        //        {
+        //            found = cat.GetAll().ToList().OrderBy(x => x.Categoryname);
+        //        }
+        //        /*  found.ToList().ForEach(x =>
+        //          {
+        //              //   var stuff = mapper.Map<Category, CategoryViewModel>(cat.GetByID(x.IdCategory));
+        //              var stuff = new CategoryViewModel()
+        //              {
+        //                  stuff.IdCategory = x.IdCategory,
+        //                  stuff.Subcategory = x.Subcategory,
+        //                  stuff.Categoryname = x.Categoryname
+        //              };
+        //              model.Add(stuff);
+        //          });*/
+
+        //        foreach (var item in found)
+        //        {
+        //            var stuff = new CategoryViewModel()
+        //            {
+        //                Categoryname = item.Categoryname,
+        //                IdCategory = item.IdCategory
+        //            };
+        //            model.Add(stuff);
+        //        }
+
+        //        return Json(model);
+        //    }
+
+
+        //    [HttpPost]
+        //    public ActionResult CreateCategory(CategoryViewModel model)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            var stuff = new Category()
+        //            {
+        //                Categoryname = model.Categoryname
+        //            };
+        //            cat.Create(stuff);
+        //        }
+
+        //        return RedirectToAction("Categories");
+        //}
+
+        //public ActionResult DeleteCategory(int id)
+        //{
+        //    cat.Delete(id);
+        //    return RedirectToAction("Categories");
+
+        //}
+
+        //    //---------------------------------------------------------- SUBCATEGORIES
+        //    public ActionResult CreateSubcategory(SubcategoryViewModel model)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            var stuff = new Subcategory()
+        //            {
+        //                Subcategoryname = model.Subcategoryname,
+        //                IdCategory = model.IdCategory
+
+        //            };
+        //            sub.Create(stuff);
+        //        }
+
+        //        return RedirectToAction("Categories");
+        //    }
+
+        //    public ActionResult DeleteSubcategory(int id)
+        //    {
+        //        sub.Delete(id);
+        //        return RedirectToAction("Categories");
+
+        //    }
+        #endregion
     }
 }

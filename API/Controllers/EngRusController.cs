@@ -38,90 +38,117 @@ namespace API.Controllers
             this.cat = cat;
             this.translation = translation;
         }
-        
         [HttpGet]
-        public JsonResult Index(string search, int category, int subcategory)
+        [Route("{search}")]
+        public ActionResult Search(string search)
         {
-            List<EngRusViewModel> model = new List<EngRusViewModel>();
-            IEnumerable<TranslationEngRus> found;
+            return Json(translation.Find(search));
+        }
 
-
-            if (!String.IsNullOrEmpty(search))
-            {
-                found = translation.Find(search);
-            }
-            else if (category!=0)
-            {
-                found = translation.GetByCategory(category);
-            }
-            else if (subcategory!=0)
-            {
-                found = translation.GetBySubcategory(subcategory);
-            }
-            else
-            {
-                found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
-            }
-            found.ToList().ForEach(x =>
-            {
-                var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
-                model.Add(stuff);
-            });
-
-            //return View(model);
-            return Json(model);
-        }//
         [HttpGet]
-        public JsonResult GetByCategory(string search, int category)
+        [Route("Cat/{category}/{search}")]
+        public ActionResult GetByCat(string search, int category)
         {
-            List<EngRusViewModel> model = new List<EngRusViewModel>();
-            IEnumerable<TranslationEngRus> found;
-
-            if (!String.IsNullOrEmpty(search) && category != 0)
-            {
-                found = translation.FindByCategory(category, search);
-            }
-            //else if (category != 0)
-            //{
-            //    found = translation.GetByCategory(category);
-            //}
-            else
-            {
-                found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
-            }
-            found.ToList().ForEach(x =>
-            {
-                var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
-                model.Add(stuff);
-            });
-            //return View(model);
-            return Json(model);
+            return Json(translation.FindByCategory(category, search));
         }
         [HttpGet]
-        public JsonResult GetBySubcategory(string search, int subcategory)
+        [Route("Subcat/{subcategory}/{search}")]
+        public ActionResult GetBySubcat(string search, int subcategory)
         {
-            List<EngRusViewModel> model = new List<EngRusViewModel>();
-            IEnumerable<TranslationEngRus> found;
-
-            if (!String.IsNullOrEmpty(search) && subcategory != 0)
-            {
-                found = translation.FindBySubcategory(subcategory, search);
-            }
-            //else if (subcategory != 0)
-            //{
-            //    found = translation.GetBySubcategory(subcategory);
-            //}
-            else
-            {
-                found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
-            }
-            found.ToList().ForEach(x =>
-            {
-                var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
-                model.Add(stuff);
-            });
-            //return View(model);
-            return Json(model);
+            return Json(translation.FindBySubcategory(subcategory, search));
         }
+        [HttpGet]
+        [Route("Cat/{category}/Subcat/{subcategory}/{search}")]
+        public ActionResult GetByCatSubcat(string search, int category, int subcategory)
+        {
+            return Json(translation.FindByCatSubcat(category, subcategory, search));
+        }
+        //#region
+        //[HttpGet]
+        //public JsonResult Index(string search, int category, int subcategory)
+        //{
+        //    List<EngRusViewModel> model = new List<EngRusViewModel>();
+        //    IEnumerable<TranslationEngRus> found;
+
+
+        //    if (!String.IsNullOrEmpty(search))
+        //    {
+        //        found = translation.Find(search);
+        //    }
+        //    else if (category!=0)
+        //    {
+        //        found = translation.GetByCategory(category);
+        //    }
+        //    else if (subcategory!=0)
+        //    {
+        //        found = translation.GetBySubcategory(subcategory);
+        //    }
+        //    else
+        //    {
+        //        found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
+        //    }
+        //    found.ToList().ForEach(x =>
+        //    {
+        //        var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
+        //        model.Add(stuff);
+        //    });
+
+        //    //return View(model);
+        //    return Json(model);
+        //}//
+        //[HttpGet]
+        //public JsonResult GetByCategory(string search, int category)
+        //{
+        //    List<EngRusViewModel> model = new List<EngRusViewModel>();
+        //    IEnumerable<TranslationEngRus> found;
+
+        //    if (!String.IsNullOrEmpty(search) && category != 0)
+        //    {
+        //        found = translation.FindByCategory(category, search);
+        //    }
+        //    //else if (category != 0)
+        //    //{
+        //    //    found = translation.GetByCategory(category);
+        //    //}
+        //    else
+        //    {
+        //        found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
+        //    }
+        //    found.ToList().ForEach(x =>
+        //    {
+        //        var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
+        //        model.Add(stuff);
+        //    });
+        //    //return View(model);
+        //    return Json(model);
+        //}
+        //[HttpGet]
+        //public JsonResult GetBySubcategory(string search, int subcategory)
+        //{
+        //    List<EngRusViewModel> model = new List<EngRusViewModel>();
+        //    IEnumerable<TranslationEngRus> found;
+
+        //    if (!String.IsNullOrEmpty(search) && subcategory != 0)
+        //    {
+        //        found = translation.FindBySubcategory(subcategory, search);
+        //    }
+        //    //else if (subcategory != 0)
+        //    //{
+        //    //    found = translation.GetBySubcategory(subcategory);
+        //    //}
+        //    else
+        //    {
+        //        found = translation.GetAll().ToList().OrderBy(x => x.IdWordEngNavigation.Word);
+        //    }
+        //    found.ToList().ForEach(x =>
+        //    {
+        //        var stuff = mapper.Map<TranslationEngRus, EngRusViewModel>(translation.GetByID(x.IdTranslation));
+        //        model.Add(stuff);
+        //    });
+        //    //return View(model);
+        //    return Json(model);
+        //}
+        //#endregion
+
     }
 }
