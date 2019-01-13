@@ -15,14 +15,14 @@ namespace API.Controllers
     {
         private readonly IMapper mapper;
 
-        private readonly IGenericTranslate<TranslationEngRus> translation;
+        private readonly IGenericTranslate<TranslationEngEst> translation;
         private readonly IGenericService<LangEnglish> langEnglish;
         private readonly IGenericService<LangEstonian> langEstonian;
         private readonly IGenericService<PartOfSpeech> part;
         private readonly IGenericService<Subcategory> sub;
         private readonly IGenericService<Category> cat;
         public EngEstController(
-            IGenericTranslate<TranslationEngRus> tr,
+            IGenericTranslate<TranslationEngEst> tr,
             IMapper mapper,
             IGenericService<LangEnglish> langEnglish,
             IGenericService<LangEstonian> langEstonian,
